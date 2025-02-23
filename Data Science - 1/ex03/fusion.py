@@ -23,7 +23,8 @@ def merge_with_items(username, password, dbname="piscineds", host="localhost", p
                 
                 insert_query = text("""
                     INSERT INTO customers_left_joined_items
-                    SELECT customers.event_time, 
+                    SELECT DISTINCT 
+                           customers.event_time, 
                            customers.event_type,
                            customers.product_id,
                            customers.price,
@@ -36,13 +37,19 @@ def merge_with_items(username, password, dbname="piscineds", host="localhost", p
                 """)
                 conn.execute(insert_query)
 
+                count_before = conn.execute(text("SELECT COUNT(*) FROM customers")).scalar()
+                count_after = conn.execute(text("SELECT COUNT(*) FROM customers_left_joined_items")).scalar()
+                
+                print(f"Nombre de lignes avant fusion : {count_before}")
+                print(f"Nombre de lignes après fusion : {count_after}")
+
                 drop_table_query = text("DROP TABLE IF EXISTS customers;")
                 conn.execute(drop_table_query)
 
                 rename_table_query = text("ALTER TABLE customers_left_joined_items RENAME TO customers;")
                 conn.execute(rename_table_query)
 
-        print("✅ Fusion avec la table items réalisée avec succès!")
+        print("✅ Fusion avec la table items réalisée avec succès, sans duplications!")
 
     except Exception as e:
         print(f"❌ Erreur lors de la fusion avec items: {e}")

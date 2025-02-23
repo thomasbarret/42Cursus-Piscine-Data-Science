@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('gtk3agg')
+# matplotlib.use('gtk3agg')
 import matplotlib.pyplot as plt
 import psycopg2
 import pandas as pd

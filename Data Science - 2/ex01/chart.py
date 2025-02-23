@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('gtk3agg')
+# matplotlib.use('gtk3agg')
 import matplotlib.pyplot as plt
 import psycopg2
 import pandas as pd
@@ -78,7 +78,6 @@ def plot_avg_spend_per_customer(df):
     plt.xticks(ticks=ticks, labels=labels)
     plt.xlim(dates.iloc[0], dates.iloc[-1])
     plt.grid(True)
-    plt.legend()
     plt.tight_layout()
     plt.show()
 
