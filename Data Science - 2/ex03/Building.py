@@ -16,43 +16,54 @@ def load_data(query):
     conn.close()
     return data
 
-def plot_frequency_histogram(data):
-    frequency = [row[1] for row in data if row[1] < 30]
-    
+def plot_histogram(data, title, xlabel, ylabel, bins, range, xticks, yticks, ylim, xlim, color):
     plt.figure(figsize=(12, 6))
-    plt.hist(frequency, bins=5, range=(0, 30), rwidth=1.0, color='#4c72b0', alpha=0.8, edgecolor="white")
+    plt.hist(data, bins=bins, range=range, rwidth=1.0, color=color, alpha=0.8, edgecolor="white")
     
-    plt.title("Distribution du nombre de commandes par utilisateur")
-    plt.xlabel("frequency")
-    plt.ylabel("customers")
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     
-    plt.yticks(range(0, 70000, 10000))
-    plt.xticks([0, 10, 20, 30])
+    plt.yticks(yticks)
+    plt.xticks(xticks)
     
-    plt.ylim(0, 60000)
-    plt.xlim(0, 30)
+    plt.ylim(ylim)
+    plt.xlim(xlim)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.show()
 
+def plot_frequency_histogram(data):
+    frequency = [row[1] for row in data if row[1] < 40]
+    plot_histogram(
+        frequency,
+        title="frequency",
+        xlabel="frequency",
+        ylabel="customers",
+        bins=5,
+        range=(0, 40),
+        xticks=range(0, 41, 10),
+        yticks=range(0, 70000, 10000),
+        ylim=(0, 65000),
+        xlim=(0, 40),
+        color='#4c72b0'
+    )
+
 def plot_value_histogram(data):
-    values = [row[1] for row in data if row[1] < 200]
-    
-    plt.figure(figsize=(12, 6))
-    plt.hist(values, bins=5, range=(0, 200), rwidth=1.0, color='#55a868', alpha=0.8, edgecolor="white")
-    
-    plt.title("Distribution des dépenses totales par utilisateur")
-    plt.xlabel("monetary value in ₳")
-    plt.ylabel("customers")
-    
-    plt.yticks(range(0, 45000, 5000))
-    plt.xticks([0, 50, 100, 150, 200])
-    
-    plt.ylim(0, 40000)
-    plt.xlim(0, 200)
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
-    plt.show()
+    values = [row[1] for row in data if row[1] < 250]
+    plot_histogram(
+        values,
+        title="monetary value in ₳",
+        xlabel="monetary value in ₳",
+        ylabel="customers",
+        bins=5,
+        range=(0, 250),
+        xticks=range(0, 251, 50),
+        yticks=range(0, 45000, 5000),
+        ylim=(0, 45000),
+        xlim=(0, 250),
+        color='#55a868'
+    )
 
 def main():
     try:
@@ -68,7 +79,7 @@ def main():
         FROM customers
         WHERE event_type = 'purchase'
         GROUP BY user_id
-        HAVING SUM(price) < 200;
+        HAVING SUM(price) < 225;
         """
 
         data_frequency = load_data(query_frequency)

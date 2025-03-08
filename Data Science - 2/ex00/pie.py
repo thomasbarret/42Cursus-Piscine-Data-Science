@@ -42,7 +42,7 @@ def plot_event_counts(event_counts):
     )
     plt.title("Répartition des types d'événements")
     
-    plt.show()  # Affichage direct du graphique
+    plt.show() 
 
 if __name__ == "__main__":
     try:

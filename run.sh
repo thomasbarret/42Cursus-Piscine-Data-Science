@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exécution manuelle des scripts dans "Data Science - 0"
-for file in "Data Science - 0/ex02/table.py" "Data Science - 0/ex03/automatic_table.py" "Data Science - 0/ex04/items_table.py"; do
+for file in "Data Science - 0/ex03/automatic_table.py" "Data Science - 0/ex04/items_table.py"; do
     # Vérifier si le fichier existe
     if [ -f "$file" ]; then
         dir=$(dirname "$file")
