@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('gtk3agg')
 import psycopg2
 import matplotlib.pyplot as plt
 import numpy as np
@@ -6,7 +8,6 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 
 def load_data(query):
-    """Charge les données depuis PostgreSQL en réutilisant la connexion du fichier Building.py"""
     try:
         conn = psycopg2.connect(
             host="localhost",
@@ -31,7 +32,7 @@ def prepare_features(X):
     return scaler.fit_transform(np.nan_to_num(X)), scaler
 
 def plot_clusters(X, labels, centroids, title):
-    """Visualisation PCA 2D inspirée des exemples GitHub"""
+    """Visualisation PCA 2D"""
     pca = PCA(n_components=2)
     X_pca = pca.fit_transform(X)
     
@@ -49,13 +50,11 @@ def plot_clusters(X, labels, centroids, title):
     plt.show()
 
 def plot_cluster_profile(centroids, features, scaler):
-    """Profil des clusters inspiré des visualisations du sujet"""
+    """Profil des clusters"""
     plt.figure(figsize=(14, 7))
     
-    # Dénormalisation des centroïdes
     centroids_denorm = scaler.inverse_transform(centroids)
     
-    # Création du radar chart
     angles = np.linspace(0, 2 * np.pi, len(features), endpoint=False).tolist()
     angles += angles[:1]
     
@@ -76,7 +75,6 @@ def plot_cluster_profile(centroids, features, scaler):
     plt.show()
 
 def main():
-    # Requête SQL unifiée avec gestion des schémas
     query = """
     SELECT 
         COUNT(DISTINCT CASE WHEN event_type = 'purchase' THEN user_session END) AS purchases,
